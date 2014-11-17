@@ -1,0 +1,22 @@
+*** Variables ***
+${GA_KEY}         AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM
+${GA_DIMENSION}    rt:pagePath
+${GA_METRIC}      rt:pageViews
+${GA_PROFILE_ID}    ga:92930649
+${GA_BEARER_TOKEN}    Bearer ya29.wQCPBkiWXqArPE0XeRFjLRBpcc9pf__ufPY1TIhqgvCogFtDeteivbSwPu5EpPN-yD0oXgApvyP8PQ
+${GA_REAL_TIME_DATA_ENDPOINT}    https://content.googleapis.com/analytics/v3/data/realtime?key=${GA_KEY}
+
+*** Keywords ***
+Page Hit Should Have Been Recorded In Google Analaytics
+    [Arguments]    ${page_hit}
+    Create Session    ga_realtime    ${GA_REAL_TIME_DATA_ENDPOINT}
+    #URL Parameters to be passed to GA Real Time Endpoint
+    ${params}=    Create Dictionary    ids    ${GA_PROFILE_ID}    metrics    ${GA_METRIC}    dimensions
+    ...    ${GA_DIMENSION}    key    ${GA_KEY}
+    #Headers to be passed to GA Real Time Endpoint
+    ${headers}=    Create Dictionary    authorization    ${GA_BEARER_TOKEN}
+    #Response recieved from ga realtime end point
+    ${resp}=    Get    ga_realtime    /get    params=${params}    headers=${headers}
+    ${jsondata}=    To Json    ${resp.content}
+    #Assertion
+    Should Contain    ${resp.content}    /web/guest/myblue
