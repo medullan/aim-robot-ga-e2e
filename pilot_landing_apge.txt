@@ -1,0 +1,36 @@
+*** settings ***
+Library           Collections
+Library           OperatingSystem
+Library           RequestsKeywords.py
+Library           Selenium2Library
+
+*** Variables ***
+#AIM VARIBALES
+${BROWSER}        firefox
+${MYBLUE_PILOT_URL}    https://test.fepblue.org:7443/pilot/login
+#GA VARIBALES
+${GA_KEY}         AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM
+${GA_DIMENSION}    rt:pagePath
+${GA_METRIC}      rt:pageViews
+${GA_PROFILE_ID}    ga:92930649
+${GA_BEARER_TOKEN}    Bearer ya29.wQBWgfsQR84Gk4uZ0uqqhLUijPBD-fcE6VfL6n09q_IO0iHjEvVtb9nJZ_np1L9LCHXD8W3W5LDDdA
+${GA_REAL_TIME_DATA_ENDPOINT}    https://content.googleapis.com/analytics/v3/data/realtime?key=${GA_KEY}
+
+*** Test Cases ***
+Click Forget Password Link
+    Open Browser    ${MYBLUE_PILOT_URL}    ${BROWSER}
+    Click Link    password
+
+Request Realtime Page Hits From Google Analytics
+    Create Session    ga_realtime    ${GA_REAL_TIME_DATA_ENDPOINT}
+    #URL Parameters to be passed to GA Real Time Endpoint
+    ${params}=    Create Dictionary    ids    ${GA_PROFILE_ID}    metrics    ${GA_METRIC}    dimensions
+    ...    ${GA_DIMENSION}    key    ${GA_KEY}
+    #Headers to be passed to GA Real Time Endpoint
+    ${headers}=    Create Dictionary    authorization    ${GA_BEARER_TOKEN}
+    #Response recieved from ga realtime end point
+    ${resp}=    Get    ga_realtime    /get    params=${params}    headers=${headers}
+    ${jsondata}=    To Json    ${resp.content}
+    #Assertion
+    Should Contain    ${resp.content}    /web/guest/myblue
+    #Modularize Gherkin Format
