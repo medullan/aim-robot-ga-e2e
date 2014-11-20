@@ -2,8 +2,8 @@
 ${GA_KEY}         AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM
 ${GA_DIMENSION}    rt:pagePath
 ${GA_METRIC}      rt:pageViews
-${GA_PROFILE_ID}    ga:92930649
-${GA_BEARER_TOKEN}    Bearer ya29.wQCPBkiWXqArPE0XeRFjLRBpcc9pf__ufPY1TIhqgvCogFtDeteivbSwPu5EpPN-yD0oXgApvyP8PQ
+${GA_PROFILE_ID}    ga:92933908
+${GA_BEARER_TOKEN}    Bearer ya29.wgDOLUYD_LupjE3BlUZJQN8yEI9pPV0Lv4KKXlK3Cp6aNaNxpDtI_YaXftu3ZjYIi_FLdbIa2B8aTQ
 ${GA_REAL_TIME_DATA_ENDPOINT}    https://content.googleapis.com/analytics/v3/data/realtime?key=${GA_KEY}
 
 *** Keywords ***

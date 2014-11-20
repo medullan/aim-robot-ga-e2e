@@ -1,0 +1,10 @@
+*** Settings ***
+Resource          cookies.txt
+
+*** Keywords ***
+Environment Setup
+    Open Browser    ${MYBLUE_PILOT_URL}    ${BROWSER}
+    Create Robot User Cookie
+
+Tear Down
+    Close Browser

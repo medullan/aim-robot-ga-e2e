@@ -1,0 +1,7 @@
+*** Keywords ***
+Create Cookie
+    [Arguments]    ${name}    ${value}
+    Execute Javascript    document.cookie="${name}=${value};"
+
+Create Robot User Cookie
+    Create Cookie    robot_user    true

@@ -1,17 +1,31 @@
 *** settings ***
-Library           Collections
+Suite Setup       Environment Setup
+Library           Collections    #Suite Teardown    Teardown Browser
 Library           OperatingSystem
 Library           RequestsKeywords.py
 Library           Selenium2Library
 Resource          keywords/google-analytics.txt
+Resource          keywords/meda.txt
+Resource          keywords/common-resources.txt
 
 *** Variables ***
-#AIM VARIBALES
-${BROWSER}        firefox
+${BROWSER}        chrome
 ${MYBLUE_PILOT_URL}    https://test.fepblue.org:7443/pilot/login
 
 *** Test Cases ***
 Click Forget Password Link
-    Open Browser    ${MYBLUE_PILOT_URL}    ${BROWSER}
-    Click Link    password
-    Page Hit Should Have Been Recorded In Google Analaytics    /web/guest/myblue
+    Input Text    username    marchcontractuat
+    Input Text    password    Bigfun21!
+    Click Button    login
+    Wait Until Element Is Visible    css=#health-tools
+    Click Element    css=#health-tools
+    Click Element    css=li[data-url-config=\"navigation.main.healthTools.nodes.bha\"] a    #Click Element    css=data-url-config="navigation.main.healthTools.nodes.bha"
+    Create Robot User Cookie
+    #Sleep    10s
+    #Go To    https://ssotest.fepblue.org:9031/idp/startSSO.ping?PartnerSpId=https://www.webmdhealth.com/sp&TargetResource=https://startid.fepblue.org?value=3563
+    #Execute Javascript    document.cookie="robot_user=true; expires=Thu, 18 Dec 2014 12:00:00 UTC; domain=staging.webmdhealth.com;"    dont_wait
+    #Click Link    Blue Health Assessment
+    #Execute Javascript    document.cookie="username=John Doe; expires=Thu, 18 Dec 2014 12:00:00 UTC; domain=staging.webmdhealth.com;"
+    #Click Link    password
+    #Page Hit Should Have Been Recorded In Google Analaytics    /web/guest/myblue
+    #Page Hit Should Have Been Recorded In MEDA    /web/guest/myblue
