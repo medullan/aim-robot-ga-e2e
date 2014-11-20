@@ -1,0 +1,7 @@
+*.log
+.project
+.DS_Store
+output
+tmp
+log
+
