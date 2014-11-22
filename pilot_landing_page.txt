@@ -1,6 +1,5 @@
 *** settings ***
-Suite Setup       Environment Setup
-Library           Collections    #Suite Teardown    Teardown Browser
+Library           Collections    #Suite Setup    Environment Setup    #Suite Teardown    Teardown Browser
 Library           OperatingSystem
 Library           RequestsKeywords.py
 Library           Selenium2Library
@@ -9,10 +8,22 @@ Resource          keywords/meda.txt
 Resource          keywords/common-resources.txt
 
 *** Variables ***
-${BROWSER}        chrome
+${BROWSER}        firefox
 ${MYBLUE_PILOT_URL}    https://test.fepblue.org:7443/pilot/login
+${OAUTH_LOGIN}    https://accounts.google.com/o/oauth2/auth?redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/analytics.readonly&response_type=code&client_id=519024691571-ahkuf7ba5qpfla6971gf7duc3live6u0.apps.googleusercontent.com
 
 *** Test Cases ***
+Initialze
+    Open Browser    ${OAUTH_LOGIN}    ${BROWSER}
+    Input Text    Email    dbell@medullan.com
+    Input Text    Passwd    denis64bit
+    Click Button    signIn
+    Wait Until Element Is Visible    css=#submit_approve_access
+    Sleep    3s
+    Click Button    submit_approve_access
+    ${code}    Get Value    css=#code
+    Execute Javascript    window.alert("${code}");
+
 Click Forget Password Link
     Input Text    username    marchcontractuat
     Input Text    password    Bigfun21!
@@ -29,3 +40,6 @@ Click Forget Password Link
     #Click Link    password
     #Page Hit Should Have Been Recorded In Google Analaytics    /web/guest/myblue
     #Page Hit Should Have Been Recorded In MEDA    /web/guest/myblue
+
+Test
+    Get Count For Page Hit    /pilot/login

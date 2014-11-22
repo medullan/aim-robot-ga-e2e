@@ -2,9 +2,10 @@
 ${GA_KEY}         AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM
 ${GA_DIMENSION}    rt:pagePath
 ${GA_METRIC}      rt:pageViews
-${GA_PROFILE_ID}    ga:92933908
-${GA_BEARER_TOKEN}    Bearer ya29.wgDOLUYD_LupjE3BlUZJQN8yEI9pPV0Lv4KKXlK3Cp6aNaNxpDtI_YaXftu3ZjYIi_FLdbIa2B8aTQ
-${GA_REAL_TIME_DATA_ENDPOINT}    https://content.googleapis.com/analytics/v3/data/realtime?key=${GA_KEY}
+${GA_PROFILE_ID}    ga:92930649
+${GA_BEARER_TOKEN}    Bearer ya29.xgB0f7VkgX6pupi8loFgwbZmMT4FkRQSov7N3dtimXK9xsxb2QUq9frerxwnvH_TjNjaoDawLZLGRA
+${GA_REAL_TIME_DATA_ENDPOINT}    https://content.googleapis.com
+${GA_FILTERS}     rt:pagePath==/pilot/login
 
 *** Keywords ***
 Page Hit Should Have Been Recorded In Google Analaytics
@@ -19,4 +20,18 @@ Page Hit Should Have Been Recorded In Google Analaytics
     ${resp}=    Get    ga_realtime    /get    params=${params}    headers=${headers}
     ${jsondata}=    To Json    ${resp.content}
     #Assertion
-    Should Contain    ${resp.content}    /web/guest/myblue
+    Should Contain    ${resp.content}    ${page_hit}
+
+Get Count For Page Hit
+    [Arguments]    ${page_hit}
+    Create Session    ga_realtime    ${GA_REAL_TIME_DATA_ENDPOINT}
+    #URL Parameters to be passed to GA Real Time Endpoint
+    ${params}=    Create Dictionary    ids    ${GA_PROFILE_ID}    metrics    ${GA_METRIC}    dimensions
+    ...    ${GA_DIMENSION}
+    #Headers to be passed to GA Real Time Endpoint
+    ${headers}=    Create Dictionary    authorization    ${GA_BEARER_TOKEN}
+    #Response recieved from ga realtime end point
+    ${resp}=    Get    ga_realtime    /analytics/v3/data/realtime    params=${params}    headers=${headers}
+    ${jsondata}=    To Json    ${resp.content}
+    #Assertion
+    Should Contain    ${resp.content}    ${page_hit}
