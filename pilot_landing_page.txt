@@ -22,7 +22,7 @@ Initialze
     Sleep    3s
     Click Button    submit_approve_access
     ${code}    Get Value    css=#code
-    Execute Javascript    window.alert("${code}");
+    Get Bearer Token    ${code}
 
 Click Forget Password Link
     Input Text    username    marchcontractuat
