@@ -9,14 +9,14 @@ Resource          keywords/common-resources.txt
 
 *** Variables ***
 ${BROWSER}        firefox
-${MYBLUE_PILOT_URL}    https://test.fepblue.org:7443/pilot/login
+${MYBLUE_PILOT_URL}    https://dev.fepblue.org:7443/pilot/login
 ${OAUTH_LOGIN}    https://accounts.google.com/o/oauth2/auth?redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/analytics.readonly&response_type=code&client_id=519024691571-ahkuf7ba5qpfla6971gf7duc3live6u0.apps.googleusercontent.com
 
 *** Test Cases ***
 Initialze
     Open Browser    ${OAUTH_LOGIN}    ${BROWSER}
     Input Text    Email    dbell@medullan.com
-    Input Text    Passwd    denis64bit
+    Input Text    Passwd    password
     Click Button    signIn
     Wait Until Element Is Visible    css=#submit_approve_access
     Sleep    3s
@@ -24,22 +24,38 @@ Initialze
     ${code}    Get Value    css=#code
     Get Bearer Token    ${code}
 
-Click Forget Password Link
-    Input Text    username    marchcontractuat
-    Input Text    password    Bigfun21!
+Navigate To Pilot Site
+    Open Browser    ${MYBLUE_PILOT_URL}    ${BROWSER}
+    Create Robot User Cookie
+    Get Page Hit Count    /pilot/login
+    Reload Page
+    Get Page Hit Count    /pilot/login
+    #Check if it increment
+    #Page Hit Should Have Been Recorded In Google Analaytics    /pilot/login
+
+Login To Pilot Site
+    #Open Browser    ${MYBLUE_PILOT_URL}    ${BROWSER}
+    Create Robot User Cookie
+    Input Text    css=#LoginUsername    marchcontractuat
+    Input Text    css=#LoginPassword    Bigfun21!
     Click Button    login
     Wait Until Element Is Visible    css=#health-tools
     Click Element    css=#health-tools
-    Click Element    css=li[data-url-config=\"navigation.main.healthTools.nodes.bha\"] a    #Click Element    css=data-url-config="navigation.main.healthTools.nodes.bha"
+    Click Element    css=li[data-url-config=\"navigation.main.healthTools.nodes.bha\"] a
+    Page Hit Should Have Been Recorded In Google Analaytics    /pilot/landingpage
+
+Navigate To Pilot Site 2
+    Open Browser    ${MYBLUE_PILOT_URL}    ${BROWSER}
     Create Robot User Cookie
-    #Sleep    10s
-    #Go To    https://ssotest.fepblue.org:9031/idp/startSSO.ping?PartnerSpId=https://www.webmdhealth.com/sp&TargetResource=https://startid.fepblue.org?value=3563
-    #Execute Javascript    document.cookie="robot_user=true; expires=Thu, 18 Dec 2014 12:00:00 UTC; domain=staging.webmdhealth.com;"    dont_wait
-    #Click Link    Blue Health Assessment
-    #Execute Javascript    document.cookie="username=John Doe; expires=Thu, 18 Dec 2014 12:00:00 UTC; domain=staging.webmdhealth.com;"
-    #Click Link    password
-    #Page Hit Should Have Been Recorded In Google Analaytics    /web/guest/myblue
-    #Page Hit Should Have Been Recorded In MEDA    /web/guest/myblue
+    Reload Page
+    Wait Until Element Is Visible    css=#LoginUsername
+    Input Text    css=#LoginUsername    marchcontractuat
+    Input Text    css=#LoginPassword    Bigfun21!
+    Click Button    login
+    Wait Until Element Is Visible    css=#health-tools
+    Click Element    css=#health-tools
+    Click Element    css=li[data-url-config=\"navigation.main.healthTools.nodes.bha\"] a
+    Page Hit Should Have Been Recorded In Google Analaytics    /pilot/landingpage
 
 Test
     Get Count For Page Hit    /pilot/login

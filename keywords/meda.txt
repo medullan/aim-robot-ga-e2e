@@ -1,12 +1,12 @@
 *** Variables ***
-${MEDA_END_POINT}    http://test.fepblue.org/meda/getlasthit.json
+${MEDA_END_POINT}    http://test.fepblue.org
+${DATA_SET}       5d7b7574af3c4454afef5c9118eef7d2
 
 *** Keywords ***
 Page Hit Should Have Been Recorded In MEDA
     [Arguments]    ${page_hit}
     Create Session    meda_endpoint    ${MEDA_END_POINT}
-    ${data}=    Create Dictionary    dataset    b1f6a62966cc4fc38ffc0897622567d7
-    ${headers}=    Create Dictionary    Content-Type    application/json
-    ${resp}=    Post    meda_endpoint    /post    body=${data}    headers=${headers}
-    #Should Contain    ${resp.status_code}    /web/guest/myblue
+    ${data}=    Create Dictionary    dataset    ${DATA_SET}
+    ${headers} =    Create Dictionary    Content-Type    text/plain
+    ${resp}=    Post    meda_endpoint    /meda/getlasthit.json    data=${data}    headers=${headers}
     Should Be Equal    ${resp.status_code}    200
