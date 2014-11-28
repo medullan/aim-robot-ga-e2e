@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20141128 10:34:26.751" generator="Robot 2.8.6 (Python 2.7.6 on darwin)">
+<suite source="/Users/medullanuser/Documents/AIM/aim-robot-ga-e2e/aim_segmentation_data.robot" id="s1" name="Aim Segmentation Data">
+<test id="s1-t1" name="Logged for Valid User">
+<kw type="setup" name="Selenium2Library.Open Browser">
+<doc>Opens a new browser instance to given URL.</doc>
+<arguments>
+<arg>${MYBLUE_PILOT}${MYBLUE_PILOT_URL}</arg>
+<arg>${BROWSER}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:26.991" level="INFO">Opening browser 'firefox' to base url 'https://test.fepblue.org:7443/pilot/login'</msg>
+<status status="PASS" endtime="20141128 10:34:32.829" starttime="20141128 10:34:26.990"></status>
+</kw>
+<kw type="kw" name="Get GA first rt:pageViews total for rt:pagePath ==${MYBLUE_CLASSIC_HOME}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Setup Analytics ga-page-count">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Create Session</arg>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Create Session">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:32.834" level="INFO">Argument types are:
+&lt;type 'bool'&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:32.834" starttime="20141128 10:34:32.833"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:32.834" starttime="20141128 10:34:32.832"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:32.834" starttime="20141128 10:34:32.831"></status>
+</kw>
+<kw type="kw" name="${counts} = Get Google Analytics Page Hit ga-page-count ${GA_KEY} ${GA_PROFILE_ID} ${GA_METRIC} ${field} ${field}${criteria}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="${params} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>ids=${GA_PROFILE_ID}</arg>
+<arg>key=${GA_KEY}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:32.836" level="INFO">${params} = {'ids': u'ga:92930649', 'key': u'AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM'}</msg>
+<status status="PASS" endtime="20141128 10:34:32.836" starttime="20141128 10:34:32.835"></status>
+</kw>
+<kw type="kw" name="Collections.Set To Dictionary">
+<doc>Adds the given `key_value_pairs` and `items` to the `dictionary`.</doc>
+<arguments>
+<arg>${params}</arg>
+<arg>metrics=${metrics}</arg>
+<arg>dimensions=${dims}</arg>
+<arg>filters=${filter}</arg>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:32.837" starttime="20141128 10:34:32.836"></status>
+</kw>
+<kw type="kw" name="${headers} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>authorization=${GA_BEARER_TOKEN}</arg>
+<arg>referer=${GA_REALTIME_CONSOLE}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:32.837" level="INFO">${headers} = {'referer': u'https://developers.google.com/analytics/devguides/reporting/realtime/v3/reference/data/realtime/get', 'authorization': u'Bearer ya29.zABUvOPcIbadhwL2XiBdatTF7LXfIrp3Gd6Xd67QQUaPcb_t2JvUV...</msg>
+<status status="PASS" endtime="20141128 10:34:32.837" starttime="20141128 10:34:32.837"></status>
+</kw>
+<kw type="kw" name="${resp} = BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Get</arg>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Get">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:32.871" level="INFO">Starting new HTTPS connection (1): content.googleapis.com</msg>
+<status status="PASS" endtime="20141128 10:34:33.373" starttime="20141128 10:34:32.838"></status>
+</kw>
+<msg timestamp="20141128 10:34:33.374" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:33.374" starttime="20141128 10:34:32.837"></status>
+</kw>
+<kw type="kw" name="${jsondata} = RequestsKeywords.To Json">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:33.375" level="INFO">${jsondata} = {u'kind': u'analytics#realtimeData', u'rows': [[u'/members/myblue/dashboard', u'1']], u'totalResults': 1, u'totalsForAllResults': {u'rt:pageViews': u'1'}, u'columnHeaders': [{u'dataType': u'STRING', u...</msg>
+<status status="PASS" endtime="20141128 10:34:33.375" starttime="20141128 10:34:33.374"></status>
+</kw>
+<kw type="kw" name="Collections.Log Dictionary">
+<doc>Logs the size and contents of the `dictionary` using given `level`.</doc>
+<arguments>
+<arg>${jsondata}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:33.376" level="INFO">Dictionary size is 9 and it contains following items:
+columnHeaders: [{u'dataType': u'STRING', u'columnType': u'DIMENSION', u'name': u'rt:pagePath'}, {u'dataType': u'INTEGER', u'columnType': u'METRIC', u'name': u'rt:pageViews'}]
+id: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+kind: analytics#realtimeData
+profileInfo: {u'webPropertyId': u'UA-50799020-2', u'internalWebPropertyId': u'89325705', u'tableId': u'realtime:92930649', u'profileId': u'92930649', u'profileName': u'DX - Test', u'accountId': u'50799020'}
+query: {u'metrics': [u'rt:pageViews'], u'max-results': 1000, u'ids': u'ga:92930649', u'filters': u'rt:pagePath==/members/myblue/dashboard', u'dimensions': u'rt:pagePath'}
+rows: [[u'/members/myblue/dashboard', u'1']]
+selfLink: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+totalResults: 1
+totalsForAllResults: {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:33.376" starttime="20141128 10:34:33.375"></status>
+</kw>
+<msg timestamp="20141128 10:34:33.376" level="INFO">${counts} = {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:33.376" starttime="20141128 10:34:32.834"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Set Test Variable">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${${varName}}</arg>
+<arg>${counts['${metric}']}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:33.379" level="INFO">${first} = 1</msg>
+<status status="PASS" endtime="20141128 10:34:33.379" starttime="20141128 10:34:33.377"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:33.379" starttime="20141128 10:34:32.830"></status>
+</kw>
+<kw type="kw" name="Login with valid user">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Login as ${${what}_USER} ${${what}_PASSWORD}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Selenium2Library.Go To">
+<doc>Navigates the active browser instance to the provided URL.</doc>
+<arguments>
+<arg>${MYBLUE_PILOT}${MYBLUE_PILOT_URL}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:33.382" level="INFO">Opening url 'https://test.fepblue.org:7443/pilot/login'</msg>
+<status status="PASS" endtime="20141128 10:34:34.542" starttime="20141128 10:34:33.382"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Input Text">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>LoginUsername</arg>
+<arg>${username}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:34.543" level="INFO">Typing text 'marchcontractuat' into text field 'LoginUsername'</msg>
+<status status="PASS" endtime="20141128 10:34:34.705" starttime="20141128 10:34:34.543"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Input Password">
+<doc>Types the given password into text field identified by `locator`.</doc>
+<arguments>
+<arg>LoginPassword</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:34.706" level="INFO">Typing password into text field 'LoginPassword'</msg>
+<status status="PASS" endtime="20141128 10:34:34.783" starttime="20141128 10:34:34.705"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Click Element">
+<doc>Click element identified by `locator`.</doc>
+<arguments>
+<arg>login</arg>
+</arguments>
+<msg timestamp="20141128 10:34:34.784" level="INFO">Clicking element 'login'.</msg>
+<status status="PASS" endtime="20141128 10:34:34.855" starttime="20141128 10:34:34.783"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:34.855" starttime="20141128 10:34:33.380"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:34.856" starttime="20141128 10:34:33.380"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Wait Until Page Contains Element">
+<doc>Waits until element specified with `locator` appears on current page.</doc>
+<arguments>
+<arg>userNameText</arg>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:37.241" starttime="20141128 10:34:34.856"></status>
+</kw>
+<kw type="kw" name="Get GA next rt:pageViews total for rt:pagePath ==${MYBLUE_CLASSIC_HOME}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Setup Analytics ga-page-count">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Create Session</arg>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Create Session">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.248" level="INFO">Argument types are:
+&lt;type 'bool'&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:37.248" starttime="20141128 10:34:37.247"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:37.248" starttime="20141128 10:34:37.246"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:37.249" starttime="20141128 10:34:37.244"></status>
+</kw>
+<kw type="kw" name="${counts} = Get Google Analytics Page Hit ga-page-count ${GA_KEY} ${GA_PROFILE_ID} ${GA_METRIC} ${field} ${field}${criteria}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="${params} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>ids=${GA_PROFILE_ID}</arg>
+<arg>key=${GA_KEY}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.254" level="INFO">${params} = {'ids': u'ga:92930649', 'key': u'AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM'}</msg>
+<status status="PASS" endtime="20141128 10:34:37.254" starttime="20141128 10:34:37.253"></status>
+</kw>
+<kw type="kw" name="Collections.Set To Dictionary">
+<doc>Adds the given `key_value_pairs` and `items` to the `dictionary`.</doc>
+<arguments>
+<arg>${params}</arg>
+<arg>metrics=${metrics}</arg>
+<arg>dimensions=${dims}</arg>
+<arg>filters=${filter}</arg>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:37.255" starttime="20141128 10:34:37.254"></status>
+</kw>
+<kw type="kw" name="${headers} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>authorization=${GA_BEARER_TOKEN}</arg>
+<arg>referer=${GA_REALTIME_CONSOLE}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.255" level="INFO">${headers} = {'referer': u'https://developers.google.com/analytics/devguides/reporting/realtime/v3/reference/data/realtime/get', 'authorization': u'Bearer ya29.zABUvOPcIbadhwL2XiBdatTF7LXfIrp3Gd6Xd67QQUaPcb_t2JvUV...</msg>
+<status status="PASS" endtime="20141128 10:34:37.255" starttime="20141128 10:34:37.255"></status>
+</kw>
+<kw type="kw" name="${resp} = BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Get</arg>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Get">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.260" level="INFO">Starting new HTTPS connection (1): content.googleapis.com</msg>
+<status status="PASS" endtime="20141128 10:34:37.774" starttime="20141128 10:34:37.256"></status>
+</kw>
+<msg timestamp="20141128 10:34:37.774" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:37.774" starttime="20141128 10:34:37.256"></status>
+</kw>
+<kw type="kw" name="${jsondata} = RequestsKeywords.To Json">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.775" level="INFO">${jsondata} = {u'kind': u'analytics#realtimeData', u'rows': [[u'/members/myblue/dashboard', u'1']], u'totalResults': 1, u'totalsForAllResults': {u'rt:pageViews': u'1'}, u'columnHeaders': [{u'dataType': u'STRING', u...</msg>
+<status status="PASS" endtime="20141128 10:34:37.775" starttime="20141128 10:34:37.774"></status>
+</kw>
+<kw type="kw" name="Collections.Log Dictionary">
+<doc>Logs the size and contents of the `dictionary` using given `level`.</doc>
+<arguments>
+<arg>${jsondata}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.776" level="INFO">Dictionary size is 9 and it contains following items:
+columnHeaders: [{u'dataType': u'STRING', u'columnType': u'DIMENSION', u'name': u'rt:pagePath'}, {u'dataType': u'INTEGER', u'columnType': u'METRIC', u'name': u'rt:pageViews'}]
+id: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+kind: analytics#realtimeData
+profileInfo: {u'webPropertyId': u'UA-50799020-2', u'internalWebPropertyId': u'89325705', u'tableId': u'realtime:92930649', u'profileId': u'92930649', u'profileName': u'DX - Test', u'accountId': u'50799020'}
+query: {u'metrics': [u'rt:pageViews'], u'max-results': 1000, u'ids': u'ga:92930649', u'filters': u'rt:pagePath==/members/myblue/dashboard', u'dimensions': u'rt:pagePath'}
+rows: [[u'/members/myblue/dashboard', u'1']]
+selfLink: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+totalResults: 1
+totalsForAllResults: {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:37.776" starttime="20141128 10:34:37.775"></status>
+</kw>
+<msg timestamp="20141128 10:34:37.776" level="INFO">${counts} = {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:37.776" starttime="20141128 10:34:37.250"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Set Test Variable">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${${varName}}</arg>
+<arg>${counts['${metric}']}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.778" level="INFO">${next} = 1</msg>
+<status status="PASS" endtime="20141128 10:34:37.779" starttime="20141128 10:34:37.777"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:37.779" starttime="20141128 10:34:37.242"></status>
+</kw>
+<kw type="kw" name="The next should be more than first">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="BuiltIn.Should Be True">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${${arg0}} &gt; ${${arg1}}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.782" level="FAIL">'1 &gt; 1' should be true.</msg>
+<status status="FAIL" endtime="20141128 10:34:37.782" starttime="20141128 10:34:37.780"></status>
+</kw>
+<status status="FAIL" endtime="20141128 10:34:37.782" starttime="20141128 10:34:37.779"></status>
+</kw>
+<kw type="teardown" name="Selenium2Library.Close Browser">
+<doc>Closes the current browser.</doc>
+<arguments>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:37.828" starttime="20141128 10:34:37.783"></status>
+</kw>
+<doc></doc>
+<tags>
+</tags>
+<status status="FAIL" endtime="20141128 10:34:37.828" critical="yes" starttime="20141128 10:34:26.988">'1 &gt; 1' should be true.</status>
+</test>
+<test id="s1-t2" name="Logged for for Invalid User">
+<kw type="setup" name="Selenium2Library.Open Browser">
+<doc>Opens a new browser instance to given URL.</doc>
+<arguments>
+<arg>${MYBLUE_PILOT}${MYBLUE_PILOT_URL}</arg>
+<arg>${BROWSER}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:37.831" level="INFO">Opening browser 'firefox' to base url 'https://test.fepblue.org:7443/pilot/login'</msg>
+<status status="PASS" endtime="20141128 10:34:43.025" starttime="20141128 10:34:37.830"></status>
+</kw>
+<kw type="kw" name="Get GA first rt:pageViews total for rt:pagePath ==${MYBLUE_CLASSIC_HOME}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Setup Analytics ga-page-count">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Create Session</arg>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Create Session">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.030" level="INFO">Argument types are:
+&lt;type 'bool'&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:43.030" starttime="20141128 10:34:43.029"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:43.030" starttime="20141128 10:34:43.028"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:43.031" starttime="20141128 10:34:43.027"></status>
+</kw>
+<kw type="kw" name="${counts} = Get Google Analytics Page Hit ga-page-count ${GA_KEY} ${GA_PROFILE_ID} ${GA_METRIC} ${field} ${field}${criteria}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="${params} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>ids=${GA_PROFILE_ID}</arg>
+<arg>key=${GA_KEY}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.033" level="INFO">${params} = {'ids': u'ga:92930649', 'key': u'AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM'}</msg>
+<status status="PASS" endtime="20141128 10:34:43.033" starttime="20141128 10:34:43.033"></status>
+</kw>
+<kw type="kw" name="Collections.Set To Dictionary">
+<doc>Adds the given `key_value_pairs` and `items` to the `dictionary`.</doc>
+<arguments>
+<arg>${params}</arg>
+<arg>metrics=${metrics}</arg>
+<arg>dimensions=${dims}</arg>
+<arg>filters=${filter}</arg>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:43.034" starttime="20141128 10:34:43.034"></status>
+</kw>
+<kw type="kw" name="${headers} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>authorization=${GA_BEARER_TOKEN}</arg>
+<arg>referer=${GA_REALTIME_CONSOLE}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.035" level="INFO">${headers} = {'referer': u'https://developers.google.com/analytics/devguides/reporting/realtime/v3/reference/data/realtime/get', 'authorization': u'Bearer ya29.zABUvOPcIbadhwL2XiBdatTF7LXfIrp3Gd6Xd67QQUaPcb_t2JvUV...</msg>
+<status status="PASS" endtime="20141128 10:34:43.035" starttime="20141128 10:34:43.035"></status>
+</kw>
+<kw type="kw" name="${resp} = BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Get</arg>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Get">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.039" level="INFO">Starting new HTTPS connection (1): content.googleapis.com</msg>
+<status status="PASS" endtime="20141128 10:34:43.536" starttime="20141128 10:34:43.036"></status>
+</kw>
+<msg timestamp="20141128 10:34:43.536" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:43.536" starttime="20141128 10:34:43.036"></status>
+</kw>
+<kw type="kw" name="${jsondata} = RequestsKeywords.To Json">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.537" level="INFO">${jsondata} = {u'kind': u'analytics#realtimeData', u'rows': [[u'/members/myblue/dashboard', u'1']], u'totalResults': 1, u'totalsForAllResults': {u'rt:pageViews': u'1'}, u'columnHeaders': [{u'dataType': u'STRING', u...</msg>
+<status status="PASS" endtime="20141128 10:34:43.537" starttime="20141128 10:34:43.536"></status>
+</kw>
+<kw type="kw" name="Collections.Log Dictionary">
+<doc>Logs the size and contents of the `dictionary` using given `level`.</doc>
+<arguments>
+<arg>${jsondata}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.538" level="INFO">Dictionary size is 9 and it contains following items:
+columnHeaders: [{u'dataType': u'STRING', u'columnType': u'DIMENSION', u'name': u'rt:pagePath'}, {u'dataType': u'INTEGER', u'columnType': u'METRIC', u'name': u'rt:pageViews'}]
+id: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+kind: analytics#realtimeData
+profileInfo: {u'webPropertyId': u'UA-50799020-2', u'internalWebPropertyId': u'89325705', u'tableId': u'realtime:92930649', u'profileId': u'92930649', u'profileName': u'DX - Test', u'accountId': u'50799020'}
+query: {u'metrics': [u'rt:pageViews'], u'max-results': 1000, u'ids': u'ga:92930649', u'filters': u'rt:pagePath==/members/myblue/dashboard', u'dimensions': u'rt:pagePath'}
+rows: [[u'/members/myblue/dashboard', u'1']]
+selfLink: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+totalResults: 1
+totalsForAllResults: {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:43.538" starttime="20141128 10:34:43.538"></status>
+</kw>
+<msg timestamp="20141128 10:34:43.539" level="INFO">${counts} = {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:43.538" starttime="20141128 10:34:43.031"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Set Test Variable">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${${varName}}</arg>
+<arg>${counts['${metric}']}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.541" level="INFO">${first} = 1</msg>
+<status status="PASS" endtime="20141128 10:34:43.541" starttime="20141128 10:34:43.539"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:43.541" starttime="20141128 10:34:43.026"></status>
+</kw>
+<kw type="kw" name="Login with invalid user">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Login as ${${what}_USER} ${${what}_PASSWORD}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Selenium2Library.Go To">
+<doc>Navigates the active browser instance to the provided URL.</doc>
+<arguments>
+<arg>${MYBLUE_PILOT}${MYBLUE_PILOT_URL}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:43.544" level="INFO">Opening url 'https://test.fepblue.org:7443/pilot/login'</msg>
+<status status="PASS" endtime="20141128 10:34:44.666" starttime="20141128 10:34:43.544"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Input Text">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>LoginUsername</arg>
+<arg>${username}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:44.667" level="INFO">Typing text 'notamember' into text field 'LoginUsername'</msg>
+<status status="PASS" endtime="20141128 10:34:44.785" starttime="20141128 10:34:44.667"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Input Password">
+<doc>Types the given password into text field identified by `locator`.</doc>
+<arguments>
+<arg>LoginPassword</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:44.786" level="INFO">Typing password into text field 'LoginPassword'</msg>
+<status status="PASS" endtime="20141128 10:34:44.853" starttime="20141128 10:34:44.785"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Click Element">
+<doc>Click element identified by `locator`.</doc>
+<arguments>
+<arg>login</arg>
+</arguments>
+<msg timestamp="20141128 10:34:44.853" level="INFO">Clicking element 'login'.</msg>
+<status status="PASS" endtime="20141128 10:34:44.923" starttime="20141128 10:34:44.853"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:44.923" starttime="20141128 10:34:43.543"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:44.923" starttime="20141128 10:34:43.541"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Wait Until Page Contains">
+<doc>Waits until `text` appears on current page.</doc>
+<arguments>
+<arg>User Credentials Invalid</arg>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:45.249" starttime="20141128 10:34:44.924"></status>
+</kw>
+<kw type="kw" name="Get GA next rt:pageViews total for rt:pagePath ==${MYBLUE_CLASSIC_HOME}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Setup Analytics ga-page-count">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Create Session</arg>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Create Session">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>${GA_REAL_TIME_DATA_ENDPOINT}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.252" level="INFO">Argument types are:
+&lt;type 'bool'&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:45.252" starttime="20141128 10:34:45.251"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:45.252" starttime="20141128 10:34:45.251"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:45.252" starttime="20141128 10:34:45.250"></status>
+</kw>
+<kw type="kw" name="${counts} = Get Google Analytics Page Hit ga-page-count ${GA_KEY} ${GA_PROFILE_ID} ${GA_METRIC} ${field} ${field}${criteria}">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="${params} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>ids=${GA_PROFILE_ID}</arg>
+<arg>key=${GA_KEY}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.254" level="INFO">${params} = {'ids': u'ga:92930649', 'key': u'AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM'}</msg>
+<status status="PASS" endtime="20141128 10:34:45.254" starttime="20141128 10:34:45.254"></status>
+</kw>
+<kw type="kw" name="Collections.Set To Dictionary">
+<doc>Adds the given `key_value_pairs` and `items` to the `dictionary`.</doc>
+<arguments>
+<arg>${params}</arg>
+<arg>metrics=${metrics}</arg>
+<arg>dimensions=${dims}</arg>
+<arg>filters=${filter}</arg>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:45.255" starttime="20141128 10:34:45.255"></status>
+</kw>
+<kw type="kw" name="${headers} = Collections.Create Dictionary">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>authorization=${GA_BEARER_TOKEN}</arg>
+<arg>referer=${GA_REALTIME_CONSOLE}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.256" level="INFO">${headers} = {'referer': u'https://developers.google.com/analytics/devguides/reporting/realtime/v3/reference/data/realtime/get', 'authorization': u'Bearer ya29.zABUvOPcIbadhwL2XiBdatTF7LXfIrp3Gd6Xd67QQUaPcb_t2JvUV...</msg>
+<status status="PASS" endtime="20141128 10:34:45.256" starttime="20141128 10:34:45.256"></status>
+</kw>
+<kw type="kw" name="${resp} = BuiltIn.Run Keyword">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>Get</arg>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<kw type="kw" name="RequestsKeywords.Get">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${ga}</arg>
+<arg>/analytics/v3/data/realtime</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.260" level="INFO">Starting new HTTPS connection (1): content.googleapis.com</msg>
+<status status="PASS" endtime="20141128 10:34:45.817" starttime="20141128 10:34:45.257"></status>
+</kw>
+<msg timestamp="20141128 10:34:45.818" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:45.818" starttime="20141128 10:34:45.256"></status>
+</kw>
+<kw type="kw" name="${jsondata} = RequestsKeywords.To Json">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.819" level="INFO">${jsondata} = {u'kind': u'analytics#realtimeData', u'rows': [[u'/members/myblue/dashboard', u'1']], u'totalResults': 1, u'totalsForAllResults': {u'rt:pageViews': u'1'}, u'columnHeaders': [{u'dataType': u'STRING', u...</msg>
+<status status="PASS" endtime="20141128 10:34:45.819" starttime="20141128 10:34:45.818"></status>
+</kw>
+<kw type="kw" name="Collections.Log Dictionary">
+<doc>Logs the size and contents of the `dictionary` using given `level`.</doc>
+<arguments>
+<arg>${jsondata}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.820" level="INFO">Dictionary size is 9 and it contains following items:
+columnHeaders: [{u'dataType': u'STRING', u'columnType': u'DIMENSION', u'name': u'rt:pagePath'}, {u'dataType': u'INTEGER', u'columnType': u'METRIC', u'name': u'rt:pageViews'}]
+id: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+kind: analytics#realtimeData
+profileInfo: {u'webPropertyId': u'UA-50799020-2', u'internalWebPropertyId': u'89325705', u'tableId': u'realtime:92930649', u'profileId': u'92930649', u'profileName': u'DX - Test', u'accountId': u'50799020'}
+query: {u'metrics': [u'rt:pageViews'], u'max-results': 1000, u'ids': u'ga:92930649', u'filters': u'rt:pagePath==/members/myblue/dashboard', u'dimensions': u'rt:pagePath'}
+rows: [[u'/members/myblue/dashboard', u'1']]
+selfLink: https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:92930649&amp;dimensions=rt:pagePath&amp;metrics=rt:pageViews&amp;filters=rt:pagePath%3D%3D/members/myblue/dashboard
+totalResults: 1
+totalsForAllResults: {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:45.820" starttime="20141128 10:34:45.819"></status>
+</kw>
+<msg timestamp="20141128 10:34:45.820" level="INFO">${counts} = {u'rt:pageViews': u'1'}</msg>
+<status status="PASS" endtime="20141128 10:34:45.820" starttime="20141128 10:34:45.253"></status>
+</kw>
+<kw type="kw" name="BuiltIn.Set Test Variable">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${${varName}}</arg>
+<arg>${counts['${metric}']}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.822" level="INFO">${next} = 1</msg>
+<status status="PASS" endtime="20141128 10:34:45.823" starttime="20141128 10:34:45.821"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:45.823" starttime="20141128 10:34:45.249"></status>
+</kw>
+<kw type="kw" name="The next should be same as first">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="BuiltIn.Should Be Equal">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${${arg0}}</arg>
+<arg>${${arg1}}</arg>
+</arguments>
+<msg timestamp="20141128 10:34:45.825" level="INFO">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20141128 10:34:45.825" starttime="20141128 10:34:45.825"></status>
+</kw>
+<status status="PASS" endtime="20141128 10:34:45.825" starttime="20141128 10:34:45.823"></status>
+</kw>
+<kw type="teardown" name="Selenium2Library.Close Browser">
+<doc>Closes the current browser.</doc>
+<arguments>
+</arguments>
+<status status="PASS" endtime="20141128 10:34:45.866" starttime="20141128 10:34:45.826"></status>
+</kw>
+<doc></doc>
+<tags>
+</tags>
+<status status="PASS" endtime="20141128 10:34:45.866" critical="yes" starttime="20141128 10:34:37.829"></status>
+</test>
+<doc></doc>
+<metadata>
+</metadata>
+<status status="FAIL" endtime="20141128 10:34:45.868" starttime="20141128 10:34:26.752"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="1">Critical Tests</stat>
+<stat fail="1" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" pass="1" id="s1" name="Aim Segmentation Data">Aim Segmentation Data</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

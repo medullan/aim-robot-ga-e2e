@@ -3,6 +3,7 @@ import json
 import vcr
 
 from urllib import urlencode
+from urllib import quote_plus
 
 import robot
 
@@ -31,7 +32,14 @@ class RequestsKeywords(object):
         utf8_data = {}
         for k,v in data.iteritems():
             utf8_data[k] = unicode(v).encode('utf-8')
-        return urlencode(utf8_data)
+
+        out = urlencode(utf8_data)
+        return out
+
+    def url_encode(self, data):
+        out = unicode(data).encode('utf-8')
+        out = quote_plus(out)
+        return out
 
     def _create_session(self, alias, url, headers, cookies, auth,
                         timeout, proxies, verify):
